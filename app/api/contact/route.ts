@@ -24,7 +24,12 @@ export async function POST(req: Request) {
     }
 
     // ✅ Read Service Account from ENV instead of file
-    const creds = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON as string);
+    const base64 = process.env.GOOGLE_SERVICE_ACCOUNT_BASE64!;
+    if (!base64)
+      throw new Error("GOOGLE_SERVICE_ACCOUNT_BASE64 is not defined");
+
+    const json = Buffer.from(base64, "base64").toString("utf8");
+    const creds = JSON.parse(json);
 
     const serviceAccountAuth = new JWT({
       email: creds.client_email,
