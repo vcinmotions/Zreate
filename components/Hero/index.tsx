@@ -19,7 +19,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative w-full overflow-hidden pt-35 pb-16 sm:pb-20 md:pt-40 md:pb-24 lg:pt-50 lg:pb-28 xl:pt-60 xl:pb-36 2xl:pt-67 2xl:pb-52">
+      <section className="relative flex min-h-[550px] w-full overflow-hidden pt-45 pb-16 sm:pb-20 md:pt-40 md:pb-24 lg:h-screen lg:pt-50 lg:pb-28 xl:h-screen xl:pt-60 xl:pb-36 2xl:pt-67 2xl:pb-52">
         {/* Background Image - Optimized for LCP */}
         <div className="absolute inset-0 -z-10">
           {/* Light mode image */}
@@ -103,7 +103,7 @@ const Hero = () => {
                 </p>
 
                 <div className="mt-8 w-full sm:mt-10 md:mt-12 lg:mt-14 xl:mt-19">
-                  <div className="flex flex-row flex-wrap items-stretch gap-3 sm:flex-row sm:items-center sm:gap-3 md:gap-3 lg:gap-4 xl:gap-5">
+                  <div className="flex flex-col flex-wrap items-stretch gap-3 sm:items-center sm:gap-3 md:gap-3 lg:gap-4 xl:flex-row xl:gap-5">
                     <Link
                       href="/support"
                       className="w-auto sm:shrink-0 xl:ml-6"
