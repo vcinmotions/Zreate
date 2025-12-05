@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
-import fs from "fs";
-import path from "path";
 
 export async function POST(req: Request) {
   try {
@@ -18,8 +16,15 @@ export async function POST(req: Request) {
       message,
     } = body;
 
-    const filePath = path.join(process.cwd(), "keys", "google.json");
-    const creds = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    if (!fullName || !email || !message) {
+      return NextResponse.json(
+        { success: false, error: "Required fields missing" },
+        { status: 400 },
+      );
+    }
+
+    // ✅ Read Service Account from ENV instead of file
+    const creds = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON as string);
 
     const serviceAccountAuth = new JWT({
       email: creds.client_email,
@@ -38,17 +43,18 @@ export async function POST(req: Request) {
     await sheet.addRow({
       Date: new Date().toLocaleString(),
       "Full Name": fullName,
-      Company: companyName,
+      Company: companyName || "",
       Email: email,
-      Phone: phone,
-      Service: serviceRequest,
-      Subject: subject,
+      Phone: phone || "",
+      Service: serviceRequest || "",
+      Subject: subject || "",
       Message: message,
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: "Data saved" });
   } catch (error) {
     console.error("Google Sheet Error:", error);
+
     return NextResponse.json(
       { success: false, error: "Data not saved" },
       { status: 500 },
