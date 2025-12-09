@@ -7,33 +7,30 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
 
+  // Disable Turbopack so Webpack config works
+  experimental: {
+    turbo: false,
+    optimizeCss: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "@radix-ui/react-icons",
+      "react-hot-toast",
+    ],
+  },
+
+  // Add an empty turbopack config (required by Next 16)
+  turbopack: {},
+
   // Performance optimizations
   poweredByHeader: false,
   generateEtags: true,
 
-  // Image optimization for Core Web Vitals
   images: {
     remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "google.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "media.istockphoto.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
+      { protocol: "http", hostname: "localhost", pathname: "/**" },
+      { protocol: "https", hostname: "google.com", pathname: "/**" },
+      { protocol: "https", hostname: "media.istockphoto.com", pathname: "/**" },
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
     ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -43,38 +40,15 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: [
-      "lucide-react",
-      "@radix-ui/react-icons",
-      "react-hot-toast",
-    ],
-  },
-
-  // Headers for performance and security
   async headers() {
     return [
       {
         source: "/:path*",
         headers: [
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
         ],
       },
       {
@@ -98,9 +72,8 @@ const nextConfig = {
     ];
   },
 
-  // Webpack optimizations
+  // Webpack config stays unchanged
   webpack: (config, { dev, isServer }) => {
-    // Production optimizations
     if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
