@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
-  req: Request,
-  context: { params: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const id = context.params.id;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
@@ -39,11 +39,10 @@ export async function DELETE(
     );
   } catch (error: any) {
     console.error("Error deleting contact:", error);
-
     return NextResponse.json(
       {
         success: false,
-        message: error?.message || "Failed to delete contact",
+        message: error.message || "Failed to delete contact",
       },
       { status: 500 },
     );
