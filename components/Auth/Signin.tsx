@@ -76,6 +76,11 @@ const Signin = () => {
       );
 
       alert("Login successful!");
+      if (user.role === "Admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
     } catch (error: any) {
       console.error(error);
       if (axios.isAxiosError(error)) {
