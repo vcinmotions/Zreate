@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
 
 const Career = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -88,12 +89,12 @@ const Career = () => {
           ideas.
         </p>
 
-        <a
+        <Link
           href="/in-en/careers"
           className="mt-8 inline-block text-base font-medium underline underline-offset-4 transition-opacity hover:opacity-80"
         >
           Join us
-        </a>
+        </Link>
       </motion.div>
     </section>
   );

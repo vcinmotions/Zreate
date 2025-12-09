@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from "next/link";
 
 const Signup = () => {
   const router = useRouter();
@@ -140,12 +141,12 @@ const Signup = () => {
 
             <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
               Already have an account?{" "}
-              <a
+              <Link
                 href="/auth/signin"
                 className="font-medium text-indigo-600 transition-colors hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
               >
                 Sign in
-              </a>
+              </Link>
             </p>
           </div>
         </div>

@@ -1,11 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setAuth } from "@/store/slices/authSlice";
+import Link from "next/link";
 
 const Signin = () => {
   const router = useRouter();
@@ -14,6 +15,46 @@ const Signin = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  //
+  //
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await axios.post("/api/auth/signin", {
+  //       email: data.email,
+  //       password: data.password,
+  //     });
+
+  //     const { token, user } = response.data;
+
+  //     dispatch(
+  //       setAuth({
+  //         token,
+  //         user,
+  //       }),
+  //     );
+
+  //     alert("Login successful!");
+  //     console.log("users is ", user);
+  //     if (user.role === "Admin") {
+  //       router.push("/admin");
+  //     } else {
+  //       router.push("/");
+  //     }
+  //   } catch (error: any) {
+  //     console.error(error);
+  //     if (axios.isAxiosError(error)) {
+  //       alert(error.response?.data?.error || "Invalid credentials");
+  //     } else {
+  //       alert("Something went wrong!");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const { user, token } = useSelector((state: any) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +76,6 @@ const Signin = () => {
       );
 
       alert("Login successful!");
-      router.push("/"); // Header will update automatically
     } catch (error: any) {
       console.error(error);
       if (axios.isAxiosError(error)) {
@@ -47,6 +87,17 @@ const Signin = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!user || !token) return;
+
+    // When user + token is updated, redirect
+    if (user.role === "Admin") {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
+  }, [user, token, router]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950">
@@ -138,12 +189,12 @@ const Signin = () => {
 
             <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{" "}
-              <a
+              <Link
                 href="/auth/signup"
                 className="font-medium text-indigo-600 transition-colors hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
               >
                 Sign up for free
-              </a>
+              </Link>
             </p>
           </div>
         </div>

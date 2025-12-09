@@ -2,6 +2,7 @@ import { store } from "@/store";
 import { ThemeProvider } from "next-themes";
 import { Nunito } from "next/font/google";
 import Providers from "./providers";
+import AuthProvider from "@/components/ClientProvider";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -40,7 +41,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={nunito.variable}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AuthProvider>{children}</AuthProvider>
+        </Providers>
       </body>
     </html>
   );

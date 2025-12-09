@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Brand } from "@/types/brand";
+import Link from "next/link";
 
 const SingleBrand = ({ brand }: { brand: Brand }) => {
   const { image, href, name, imageLight, id } = brand;
@@ -30,7 +31,7 @@ const SingleBrand = ({ brand }: { brand: Brand }) => {
   }, []);
 
   return (
-    <a
+    <Link
       ref={ref}
       href={href}
       className={`group relative mx-auto block h-9 w-[80px] overflow-visible transition-all duration-700 ease-out md:h-14 md:w-[130px] ${
@@ -51,7 +52,7 @@ const SingleBrand = ({ brand }: { brand: Brand }) => {
         alt={name}
         fill
       />
-    </a>
+    </Link>
   );
 };
 

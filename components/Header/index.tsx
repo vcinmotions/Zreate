@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
+import { useRouter } from "next/navigation";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import { RootState } from "@/store";
 import { setAuth } from "@/store/slices/authSlice";
-
+import Cookies from "js-cookie";
 const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
@@ -19,10 +19,34 @@ const Header = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
   const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
+  console.log("user is ", user);
   const isLoggedIn = !!user;
 
   const handleStickyMenu = () => {
     setStickyMenu(window.scrollY >= 80);
+  };
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/auth/signout", {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        // Clear auth state
+        dispatch(setAuth({ token: "", user: null }));
+
+        // Close mobile menu
+        closeMobileMenu();
+
+        // Redirect to home page
+        router.push("/");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   useEffect(() => {
@@ -187,32 +211,57 @@ const Header = () => {
           </nav>
 
           {/* Theme toggler and CTA */}
+          {/* Theme toggler and CTA */}
           <div className="mt-7 flex items-center gap-6 xl:mt-0">
             <ThemeToggler />
             {isLoggedIn ? (
-              <Link
-                href="/support"
-                className="group from-primary ] inline-flex items-center rounded-full border border-transparent bg-gradient-to-r via-indigo-500 to-cyan-400 p-[1px] text-sm font-semibold text-black shadow-[0_10px_30px_-15px_rgba(37,150,190,0.8)] transition hover:-translate-y-0.5"
-              >
-                <span className="font-body inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2 text-xl transition group-hover:bg-white dark:bg-slate-900/80 dark:text-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="h-4 w-4"
-                  >
-                    <path d="M3 7l9 6 9-6" />
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                  </svg>
-                  Let's Talk
-                </span>
-              </Link>
+              <>
+                {" "}
+                <Link
+                  href="/support"
+                  onClick={closeMobileMenu} // <-- Close menu on click
+                  className="group from-primary inline-flex items-center rounded-full border border-transparent bg-gradient-to-r via-indigo-500 to-cyan-400 p-[1px] text-sm font-semibold text-black shadow-[0_10px_30px_-15px_rgba(37,150,190,0.8)] transition hover:-translate-y-0.5"
+                >
+                  <span className="font-body inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2 text-xl transition group-hover:bg-white dark:bg-slate-900/80 dark:text-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      className="h-4 w-4"
+                    >
+                      <path d="M3 7l9 6 9-6" />
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                    </svg>
+                    Let's Talk
+                  </span>
+                </Link>{" "}
+                <button
+                  onClick={handleLogout}
+                  className="group from-primary inline-flex cursor-pointer items-center rounded-full border border-transparent bg-gradient-to-r via-indigo-500 to-cyan-400 p-[1px] text-sm font-semibold text-black shadow-[0_10px_30px_-15px_rgba(37,150,190,0.8)] transition hover:-translate-y-0.5"
+                >
+                  <span className="font-body inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2 text-xl transition group-hover:bg-white dark:bg-slate-900/80 dark:text-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      className="h-4 w-4"
+                    >
+                      <path d="M3 7l9 6 9-6" />
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                    </svg>
+                    Logout
+                  </span>
+                </button>
+              </>
             ) : (
               <Link
                 href="/auth/signup"
-                className="group from-primary hover:-translate-y-0.5] inline-flex items-center rounded-full border border-transparent bg-gradient-to-r via-indigo-500 to-cyan-400 p-[1px] text-sm font-semibold text-black shadow-[0_10px_30px_-15px_rgba(37,150,190,0.8)] transition"
+                onClick={closeMobileMenu} // <-- Close menu on click
+                className="group from-primary inline-flex items-center rounded-full border border-transparent bg-gradient-to-r via-indigo-500 to-cyan-400 p-[1px] text-sm font-semibold text-black shadow-[0_10px_30px_-15px_rgba(37,150,190,0.8)] transition hover:-translate-y-0.5"
               >
                 <span className="font-body inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2 text-xl transition group-hover:bg-white dark:bg-slate-900/80 dark:text-white">
                   <svg

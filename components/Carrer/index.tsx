@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 
 const Career = () => {
@@ -77,12 +78,12 @@ const Career = () => {
           ideas.
         </p>
 
-        <a
+        <Link
           href="/in-en/careers"
           className="mt-6 inline-block text-base font-medium text-black underline underline-offset-4 transition-opacity hover:opacity-80 dark:text-white"
         >
           Join us
-        </a>
+        </Link>
       </div>
     </section>
   );

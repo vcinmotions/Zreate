@@ -15,7 +15,7 @@ const ToasterContext = () => {
         success: {
           duration: 3000,
           iconTheme: {
-            primary: "#2596be",
+            primary: "#134b61ff",
             secondary: "#fff",
           },
         },

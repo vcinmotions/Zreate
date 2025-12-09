@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import Link from "next/link";
 
 const SupportPage = () => {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
@@ -250,7 +251,7 @@ const SupportPage = () => {
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
-                    <a
+                    <Link
                       key={index}
                       href={info.link}
                       className={`group fade-up-on-scroll flex gap-4 rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:translate-x-2 hover:scale-105 hover:border-sky-400/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 ${
@@ -270,7 +271,7 @@ const SupportPage = () => {
                           {info.content}
                         </p>
                       </div>
-                    </a>
+                    </Link>
                   );
                 })}
               </div>

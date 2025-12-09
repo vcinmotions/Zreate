@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type User = { id?: string; name?: string; email?: string };
+type User = {
+  id?: string;
+  name?: string;
+  email?: string;
+  role: "User" | "Admin";
+};
 
 type AuthState = {
   user: User | null;
@@ -18,13 +23,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action: PayloadAction<{ token: string; user: any }>) => {
-      // ✅ Save to localStorage immediately!
-
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
     logout(state) {
-      // ✅ Clear localStorage on logout
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       state.user = null;
