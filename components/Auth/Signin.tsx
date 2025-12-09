@@ -74,7 +74,7 @@ const Signin = () => {
           user,
         }),
       );
-
+      console.log(user);
       alert("Login successful!");
       if (user.role === "Admin") {
         router.push("/admin");
