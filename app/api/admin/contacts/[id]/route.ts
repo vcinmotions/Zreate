@@ -3,10 +3,10 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: { id: string } },
 ) {
   try {
-    const { id } = params;
+    const id = context.params.id;
 
     if (!id) {
       return NextResponse.json(
@@ -15,7 +15,6 @@ export async function DELETE(
       );
     }
 
-    
     const contact = await prisma.contact.findUnique({
       where: { id },
     });
