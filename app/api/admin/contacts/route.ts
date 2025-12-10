@@ -5,9 +5,8 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = req.nextUrl;
 
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
-    const skip = (page - 1) * limit;
+    const pageParam = searchParams.get("page");
+    const limitParam = searchParams.get("limit");
 
     const search = searchParams.get("search") || "";
     const sortBy = searchParams.get("sortBy") || "createdAt";
@@ -34,6 +33,25 @@ export async function GET(req: NextRequest) {
         lte: new Date(endDate),
       };
     }
+
+    const isPaginationEnabled = pageParam && limitParam;
+    //if no page limit return all contacts
+    if (!isPaginationEnabled) {
+      const allContacts = await prisma.contact.findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: allContacts,
+        pagination: null,
+      });
+    }
+    //if page and limit given then apply paginatoion
+    const page = parseInt(pageParam || "1");
+    const limit = parseInt(limitParam || "10");
+    const skip = (page - 1) * limit;
 
     const [contacts, total] = await Promise.all([
       prisma.contact.findMany({

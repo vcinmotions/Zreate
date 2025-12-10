@@ -18,10 +18,8 @@ const nextConfig = {
     ],
   },
 
-  // Add an empty turbopack config (required by Next 16)
   turbopack: {},
 
-  // Performance optimizations
   poweredByHeader: false,
   generateEtags: true,
 
@@ -72,33 +70,33 @@ const nextConfig = {
     ];
   },
 
-  // Webpack config stays unchanged
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: "deterministic",
-        runtimeChunk: "single",
-        splitChunks: {
-          chunks: "all",
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: "vendors",
-              priority: 10,
-              reuseExistingChunk: true,
-            },
-            common: {
-              minChunks: 2,
-              priority: 5,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      };
-    }
-    return config;
-  },
+  // // Webpack config stays unchanged
+  // webpack: (config, { dev, isServer }) => {
+  //   if (!dev && !isServer) {
+  //     config.optimization = {
+  //       ...config.optimization,
+  //       moduleIds: "deterministic",
+  //       runtimeChunk: "single",
+  //       splitChunks: {
+  //         chunks: "all",
+  //         cacheGroups: {
+  //           vendor: {
+  //             test: /[\\/]node_modules[\\/]/,
+  //             name: "vendors",
+  //             priority: 10,
+  //             reuseExistingChunk: true,
+  //           },
+  //           common: {
+  //             minChunks: 2,
+  //             priority: 5,
+  //             reuseExistingChunk: true,
+  //           },
+  //         },
+  //       },
+  //     };
+  //   }
+  //   return config;
+  // },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

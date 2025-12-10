@@ -74,23 +74,17 @@ export default function ContactsTable() {
     }
   };
   // for export of teh contact detials to the excel format
-  const fetchAllContacts = async () => {
-    try {
-      const params = new URLSearchParams({
-        page: "1",
-        limit: "10000",
-        ...(search && { search }),
-      });
+  // const fetchAllContacts = async () => {
+  //   try {
+  //     const res = await axios.get("/api/admin/contacts");
 
-      const res = await axios.get(`/api/admin/contacts?${params}`);
-
-      if (res.data.success) {
-        setAllContacts(res.data.data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch all contacts:", error);
-    }
-  };
+  //     if (res.data.success) {
+  //       setAllContacts(res.data.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch all contacts:", error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchContacts(currentPage, search);
@@ -183,13 +177,21 @@ export default function ContactsTable() {
 
   const handleExport = async () => {
     toast.loading("Preparing export...");
-    await fetchAllContacts();
 
-    setTimeout(() => {
+    try {
+      const res = await axios.get("/api/admin/contacts"); // fetch all
+      if (res.data.success) {
+        exportToExcel(res.data.data); // use the fetched data directly
+        toast.success("Exported successfully!");
+      } else {
+        toast.error("No contacts to export");
+      }
+    } catch (error) {
+      console.error("Export failed:", error);
+      toast.error("Failed to export contacts");
+    } finally {
       toast.dismiss();
-      exportToExcel(allContacts);
-      toast.success("Exported successfully!");
-    }, 500);
+    }
   };
 
   return (
